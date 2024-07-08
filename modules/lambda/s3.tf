@@ -33,7 +33,7 @@ resource "aws_s3_bucket_acl" "menu-admin-bucket-acl" {
   acl    = "public-read"
 }
 
-# Bucket Policy
+// Bucket Policy
 resource "aws_s3_bucket_policy" "menu-admin-bucket-policy" {
   bucket = aws_s3_bucket.menu-admin-demo.id
   policy = jsonencode({

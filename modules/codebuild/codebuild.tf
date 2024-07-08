@@ -6,7 +6,7 @@ resource "aws_s3_bucket" "menuadmin-script" {
   }
 }
 
-# Update Object Ownership of the S3 bucket to Object Writer
+// Update Object Ownership of the S3 bucket to Object Writer
 resource "aws_s3_bucket_ownership_controls" "menuadmin_script_ownership_controls" {
   bucket = aws_s3_bucket.menuadmin-script.id
 
@@ -14,11 +14,6 @@ resource "aws_s3_bucket_ownership_controls" "menuadmin_script_ownership_controls
     object_ownership = "ObjectWriter"
   }
 }
-
-# resource "aws_s3_bucket_acl" "menuadmin-script-acl" {
-#   bucket = aws_s3_bucket.menuadmin-script.id
-#   acl    = "private"
-# }
 
 data "aws_iam_policy_document" "assume_role_codebuild" {
   statement {
@@ -100,7 +95,7 @@ resource "aws_codebuild_project" "menudeploy-demo" {
     image_pull_credentials_type = "CODEBUILD"
   }
 
-  # specify source to s3 bucket menuadmin-script 
+  // Specify source to s3 bucket menuadmin-script 
   source {
     type      = "S3"
     location  = "menuadmin-script/"
