@@ -1,0 +1,10 @@
+# Terraform state files
+*.tfstate
+*.tfstate.*
+.terraform.lock.hcl
+
+# local Terraform configuration files
+.terraform/
+
+# Python script
+python/

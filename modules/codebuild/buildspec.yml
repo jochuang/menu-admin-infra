@@ -1,0 +1,47 @@
+version: 0.2
+
+phases:
+  build:
+    commands:
+       # downloads firebase tool
+       - wget https://firebase.tools/bin/linux/latest -O firebase
+       # change permission on file
+       - chmod +x ./firebase
+       # store current directory (pwd) in variable
+       - srcpath="$(pwd)"
+       # make a bin directory
+       - mkdir bin
+       # move firebase tool into bin
+       - mv firebase bin
+       # make bin part of path environment variable
+       - export PATH=$srcpath/bin:$PATH
+       # execute creds.py which is fetching credentials from parameter store
+       - python3 creds.py
+       # store bitbucket pass
+       - bitpass="$(cat bitpass.txt)"
+       # store firebase pass
+       - firepass="$(cat firepass.txt)"
+       # download boavista react project from bitbucket
+       # //UPDATE// bitbucket branch (demo branch)
+       - git clone -b demo --depth 1 https://Jhuang95:$bitpass@bitbucket.org/GFlores94/boavistareact.git
+       # cd into boavista react project
+       # //UPDATE// bitbucket branch
+       - cd boavistareact && git checkout demo
+       # download menu.js from s3 bucket and put it in boavista code path
+       # //UPDATE// s3 bucket name
+       - wget -O src/data/menu.js https://menu-admin-demo.s3.amazonaws.com/menu.js
+       # read menu.js content
+       # cat src/data/menu.js
+       # specify user on git
+       - git config --global user.email "joh0324@gmail.com"
+       - rm package-lock.json
+       # install node packages
+       - npm install
+       # compile boavista react code for firebase
+       - npm run build
+       # deploy to firebase
+       # //UPDATE// firebase project name
+       - firebase deploy --token $firepass --project restaurant-menu-b0d4c
+       # commit and push changes to bitbucket dev branch
+       # //UPDATE// bitbucket branch
+       - git commit -am "updated price from demo menu admin" && git push origin demo
